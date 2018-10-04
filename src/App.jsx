@@ -1,8 +1,12 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
+import { BrowserRouter as Router } from 'react-router-dom';
+import MainLayout from './MainLayout';
 
 const App = () => (
-  <div>nice</div>
+  <Router>
+    <MainLayout />
+  </Router>
 );
 
 export default hot(module)(App);
