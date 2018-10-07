@@ -25,8 +25,37 @@ export default theme => ({
     justifyContent: 'center',
     paddingTop: theme.spacing.unit * 8,
   },
-  paper_container: {
-    height: '350px',
-    width: '500px',
+  tabs_container: {
+    width: 500,
+    height: 400,
+  },
+  tab_container_outer_container: {
+    height: 350,
+    width: 500,
+  },
+  tabs_container_inner_container: {
+    height: 350,
+  },
+  progress_spinner_container: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  current_temp_upper_container: {
+    display: 'flex',
+  },
+
+  current_temp_city_name: {
+    minWidth: 0,
+  },
+  weather_icon_container: {
+    '& img': {
+      position: 'relative',
+      top: 17,
+      left: 17,
+    },
   },
 });

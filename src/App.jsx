@@ -1,7 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import { BrowserRouter as Router } from 'react-router-dom';
-import MainLayout from './MainLayout';
+import MainLayout from 'components/MainLayout';
 
 const App = () => (
   <Router>

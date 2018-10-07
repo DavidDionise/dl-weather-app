@@ -7,21 +7,15 @@ import { Link } from 'react-router-dom';
 
 import Styles from './styles';
 
-const CurrentTemp = props => (
-  <Paper classes={{ root: props.classes.paper_container }}>
-    <Grid container>
-      <Grid item xs={12}>
-        <Link to="/five-day-temps">Click Here for Five Day Temps</Link>
-      </Grid>
-    </Grid>
-  </Paper>
+const FiveDayTemp = props => (
+  <div>five day</div>
 );
 
-CurrentTemp.propTypes = {
+FiveDayTemp.propTypes = {
   // from withStyles
   classes: PropTypes.object.isRequired,
   // from router
   location: PropTypes.object.isRequired,
 };
 
-export default withStyles(Styles)(CurrentTemp);
+export default withStyles(Styles)(FiveDayTemp);
