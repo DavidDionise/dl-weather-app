@@ -57,7 +57,7 @@ class FiveDayTemp extends React.Component {
                   classes={{ root: `${classes.forecast_list_item}${idx % 2 === 0 ? ' even' : ''}` }}
                 >
                   <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={4} sm={3}>
                       <Typography variant="subheading">{weatherData.formattedTime}</Typography>
                     </Grid>
                     <Grid item xs={3}>
@@ -65,7 +65,7 @@ class FiveDayTemp extends React.Component {
                         <img src={weatherData.iconUrl} />
                       </div>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={5} sm={6}>
                       <Typography variant="subheading">
                         {`${weatherData.fTemp}\xB0 F/ ${weatherData.cTemp}\xB0 C`}
                       </Typography>

@@ -36,13 +36,11 @@ class MainLayout extends React.Component {
   state = {
     currentTab: 0,
     fetching: true,
-    zip: null,
     currentWeather: null,
     fiveDayForcast: null,
     error: null,
   };
   fetchPromise = null;
-  userCoords = null;
 
   componentDidMount() {
     const { pathname } = this.props.history.location;
@@ -63,11 +61,10 @@ class MainLayout extends React.Component {
     ) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude: lat, longitude: lon } = position.coords || {};
-        this.userCoords = { lat, lon };
 
         this.fetchPromise = Bluebird.all([
-          fetchWeather({ type: 'weather', coords: this.userCoords }),
-          fetchWeather({ type: 'forecast', coords: this.userCoords }),
+          fetchWeather({ type: 'weather', coords: { lat, lon } }),
+          fetchWeather({ type: 'forecast', coords: { lat, lon } }),
         ])
           .then((res) => {
             this.setState({
