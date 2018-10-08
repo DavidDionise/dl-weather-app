@@ -6,7 +6,7 @@ import objectToQueryString from './objectToQueryString';
  * @description - Calls the open weather map api to fetch
  *  the current weather based on current user's coordinates
  * @param {Object} props
- * @param {String} type - enum('weather', 'forecast'); 'weather' serves the current weather,
+ * @prop {String} props.type - enum('weather', 'forecast'); 'weather' serves the current weather,
  *  'forecast' serves a five day forecast
  * @prop {{ lat: String, lon: String }} props.coords - Coordinates for a fetch
  */
