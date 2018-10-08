@@ -12,8 +12,9 @@ function OWMResponse(response) {
       )
     ), '');
 
-  this.date = response.dt;
-  this.formattedDate = format(new Date(response.dt), 'ddd, MMM Do');
+  this.date = new Date(response.dt * 1000);
+  this.formattedDate = format(new Date(this.date), 'ddd, MMM Do');
+  this.formattedTime = format(new Date(this.date), 'h:mm a');
 
   this.fTemp = parseInt(response.main.temp);
   this.cTemp = parseInt((this.fTemp - 32) * (5 / 9));

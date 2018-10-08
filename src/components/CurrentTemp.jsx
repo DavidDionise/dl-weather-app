@@ -9,23 +9,32 @@ import OWMResponse from 'api/OWMResponse';
 import Styles from './styles';
 
 const CurrentTemp = props => {
-  const { weatherData } = props;
+  const { currentWeather } = props;
   return (
     <Grid container>
-      <Grid item xs={12} className={{ item: props.classes.current_temp_upper_container }}>
+      <Grid
+        item
+        xs={12}
+        classes={{ item: props.classes.current_temp_upper_container }}
+      >
         <Typography
-          variant="body2"
+          variant="title"
           classes={{ root: props.classes.current_temp_city_name }}
         >
-          {weatherData.cityName}
+          {currentWeather.cityName}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="subheading">
           <span className={props.classes.weather_icon_container}>
-            <img src={weatherData.iconUrl} />
+            <img src={currentWeather.iconUrl} />
           </span>
+          {currentWeather.description}
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <Typography variant="display1">
-          {`${weatherData.fTemp}\xB0 F/ ${weatherData.cTemp}\xB0 C`}
+          {`${currentWeather.fTemp}\xB0 F/ ${currentWeather.cTemp}\xB0 C`}
         </Typography>
       </Grid>
     </Grid>
@@ -33,7 +42,7 @@ const CurrentTemp = props => {
 };
 
 CurrentTemp.propTypes = {
-  weatherData: PropTypes.instanceOf(OWMResponse),
+  currentWeather: PropTypes.instanceOf(OWMResponse),
   // from withStyles
   classes: PropTypes.object.isRequired,
 };

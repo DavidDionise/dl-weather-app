@@ -2,8 +2,6 @@ import _ from 'lodash';
 import Bluebird from 'bluebird';
 import objectToQueryString from './objectToQueryString';
 
-Bluebird.config({ cancellation: true });
-
 /**
  * @description - Calls the open weather map api to fetch
  *  the current weather. Will either fetch by lat/lon coords (preferred),
@@ -27,7 +25,13 @@ const fetchWeather = (props = {}) => {
 
   return Bluebird.resolve(
     fetch(`${OWM_BASE_URL}/${OWM_VERSION}/${props.type}?${queryString}&units=imperial&APPID=${OWM_API_KEY}`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 404) {
+          return Bluebird.reject(new Error('No city found'));
+        }
+
+        return res.json();
+      })
   );
 }
 

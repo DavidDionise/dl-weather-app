@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+import Bluebird from 'bluebird';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router';
 import { Switch, Route } from 'react-router-dom';
@@ -28,12 +30,22 @@ class MainLayout extends React.Component {
     fetching: true,
     zip: null,
     locationInitialized: false,
+    geolocationEnabled: false,
     currentWeather: null,
+    fiveDayForcast: null,
   };
   fetchPromise = null;
   userCoords = null;
 
   componentDidMount() {
+    const { pathname } = this.props.history.location;
+    let currentTab = 0;
+    if (pathname !== '/') {
+      currentTab = routes.findIndex(route => (
+        route.path === pathname
+      ));
+    }
+
     if (
       navigator &&
       navigator.geolocation
@@ -42,15 +54,23 @@ class MainLayout extends React.Component {
         const { latitude: lat, longitude: lon } = position.coords || {};
         this.userCoords = { lat, lon };
 
-        this.fetchPromise = fetchWeather({ type: 'weather', coords: this.userCoords })
+        this.fetchPromise = Bluebird.all([
+          fetchWeather({ type: 'weather', coords: this.userCoords }),
+          fetchWeather({ type: 'forecast', coords: this.userCoords }),
+        ])
           .then((res) => {
             this.setState({
+              currentTab,
+              geolocationEnabled: true,
               locationInitialized: true,
               fetching: false,
-              currentWeather: res,
+              currentWeather: res[0],
+              fiveDayForcast: res[1].list,
             });
           });
       });
+    } else {
+      this.setState({ currentTab });
     }
   }
   componentWillUnmount() {
@@ -61,6 +81,9 @@ class MainLayout extends React.Component {
   handleTabChange = (e, tabIdx) => {
     this.setState({ currentTab: tabIdx });
     this.props.history.push(routes[tabIdx].path);
+  }
+  handleLocationChange = (zipCode, country) => {
+    console.log(zipCode, country);
   }
 
   render() {
@@ -94,7 +117,10 @@ class MainLayout extends React.Component {
                           <TabContainer title={route.title}>
                             <route.component
                               {...props}
-                              weatherData={new OWMResponse(this.state.currentWeather)}
+                                currentWeather={new OWMResponse(this.state.currentWeather)}
+                                fiveDayForcast={this.state.fiveDayForcast.map(data => new OWMResponse(data))}
+                                handleLocationChange={this.handleLocationChange}
+                                geolocationEnabled={this.state.geolocationEnabled}
                             />
                           </TabContainer>
                         )}
