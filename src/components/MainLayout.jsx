@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Bluebird from 'bluebird';
 import withStyles from '@material-ui/core/styles/withStyles';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { withRouter } from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+import WarningIcon from '@material-ui/icons/Warning';
 import TabContainer from 'components/TabContainer';
+import NotFound from 'components/NotFound';
 import routes from 'routes';
 import fetchWeather from 'api/fetchWeather';
 import OWMResponse from 'api/OWMResponse';
@@ -18,21 +22,24 @@ import Styles from './styles';
 
 @withStyles(Styles)
 @withRouter
+@withWidth()
 class MainLayout extends React.Component {
   static propTypes = {
+    // from router
+    history: PropTypes.object,
     // from withStyles
     classes: PropTypes.object.isRequired,
-    history: PropTypes.object
+    // from withWidth
+    width: PropTypes.string.isRequired,
   };
 
   state = {
     currentTab: 0,
     fetching: true,
     zip: null,
-    locationInitialized: false,
-    geolocationEnabled: false,
     currentWeather: null,
     fiveDayForcast: null,
+    error: null,
   };
   fetchPromise = null;
   userCoords = null;
@@ -44,6 +51,10 @@ class MainLayout extends React.Component {
       currentTab = routes.findIndex(route => (
         route.path === pathname
       ));
+
+      if (currentTab === -1) {
+        currentTab = false;
+      }
     }
 
     if (
@@ -61,8 +72,6 @@ class MainLayout extends React.Component {
           .then((res) => {
             this.setState({
               currentTab,
-              geolocationEnabled: true,
-              locationInitialized: true,
               fetching: false,
               currentWeather: res[0],
               fiveDayForcast: res[1].list,
@@ -70,7 +79,9 @@ class MainLayout extends React.Component {
           });
       });
     } else {
-      this.setState({ currentTab });
+      this.setState({
+        error: 'You must have geolocation services turned on in your browser to use this website',
+      });
     }
   }
   componentWillUnmount() {
@@ -82,9 +93,6 @@ class MainLayout extends React.Component {
     this.setState({ currentTab: tabIdx });
     this.props.history.push(routes[tabIdx].path);
   }
-  handleLocationChange = (zipCode, country) => {
-    console.log(zipCode, country);
-  }
 
   render() {
     const { classes } = this.props;
@@ -93,19 +101,40 @@ class MainLayout extends React.Component {
         <div className={classes.main_layout_container}>
           <div className={classes.main_layout_inner_container}>
             <div className={classes.tabs_container}>
-              <AppBar position="static" color="default">
+              <AppBar
+                position={isWidthUp('sm', this.props.width) ? 'static' : 'fixed'}
+                color="default"
+                classes={{ positionFixed: classes.fixed_app_bar_container }}
+              >
                 <Tabs
                   onChange={this.handleTabChange}
                   value={this.state.currentTab}
                   fullWidth
                   indicatorColor="primary"
                 >
-                  {routes.map(route => <Tab label={route.label} key={route.path}/>)}
+                  {routes.map(route => (
+                    <Tab
+                      label={route.label}
+                      key={route.path}
+                      disabled={this.state.error != null}
+                    />
+                  ))}
                 </Tabs>
-                {this.state.fetching ? (
-                  <div className={classes.progress_spinner_container}>
-                    <CircularProgress />
-                  </div>
+                {this.state.error ? (
+                  <TabContainer>
+                    <Typography variant="headline">
+                      <span className={classes.warning_icon_container}>
+                        <WarningIcon />
+                      </span>
+                      {this.state.error}
+                    </Typography>
+                  </TabContainer>
+                ) : this.state.fetching ? (
+                  <TabContainer>
+                    <div className={classes.progress_spinner_container}>
+                      <CircularProgress />
+                    </div>
+                  </TabContainer>
                 ) : (
                   <Switch>
                     {routes.map(route => (
@@ -117,15 +146,20 @@ class MainLayout extends React.Component {
                           <TabContainer title={route.title}>
                             <route.component
                               {...props}
-                                currentWeather={new OWMResponse(this.state.currentWeather)}
-                                fiveDayForcast={this.state.fiveDayForcast.map(data => new OWMResponse(data))}
-                                handleLocationChange={this.handleLocationChange}
-                                geolocationEnabled={this.state.geolocationEnabled}
+                              currentWeather={new OWMResponse(this.state.currentWeather)}
+                              fiveDayForcast={this.state.fiveDayForcast.map(data => new OWMResponse(data))}
                             />
                           </TabContainer>
                         )}
                       />
                     ))}
+                    <Route
+                      render={() => (
+                        <TabContainer title="404">
+                          <NotFound handleClickHome={() => this.handleTabChange(null, 0)} />
+                        </TabContainer>
+                      )}
+                    />
                   </Switch>
                 )}
               </AppBar>

@@ -1,6 +1,9 @@
 import format from 'date-fns/format';
 import _ from 'lodash';
 
+/**
+ * @description - Parses a response from Open Weather Map API
+ */
 function OWMResponse(response) {
   this.cityName = response.name;
   this.description = response.weather[0].description

@@ -9,24 +9,24 @@ import OWMResponse from 'api/OWMResponse';
 import Styles from './styles';
 
 const CurrentTemp = props => {
-  const { currentWeather } = props;
+  const { currentWeather, classes } = props;
   return (
-    <Grid container>
+    <Grid container classes={{ container: classes.current_temp_container }}>
       <Grid
         item
         xs={12}
-        classes={{ item: props.classes.current_temp_upper_container }}
+        classes={{ item: classes.current_temp_upper_container }}
       >
         <Typography
           variant="title"
-          classes={{ root: props.classes.current_temp_city_name }}
+          classes={{ root: classes.current_temp_city_name }}
         >
           {currentWeather.cityName}
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subheading">
-          <span className={props.classes.weather_icon_container}>
+          <span className={classes.weather_icon_container}>
             <img src={currentWeather.iconUrl} />
           </span>
           {currentWeather.description}

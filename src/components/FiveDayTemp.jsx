@@ -12,7 +12,7 @@ import OWMResponse from 'api/OWMResponse';
 
 import Styles from './styles';
 
-class FiveDayTemp extends React.PureComponent {
+class FiveDayTemp extends React.Component {
   static propTypes = {
     fiveDayForcast: PropTypes.arrayOf(
       PropTypes.instanceOf(OWMResponse).isRequired,

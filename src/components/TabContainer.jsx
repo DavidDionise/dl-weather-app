@@ -9,10 +9,12 @@ import Styles from './styles';
 
 const TabContainer = props => (
   <Paper classes={{ root: props.classes.tab_container_outer_container }}>
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant="display1">{props.title}</Typography>
-      </Grid>
+    <Grid container classes={{ container: props.classes.tab_container_grid_container }}>
+      {props.title ? (
+        <Grid item xs={12} classes={{ item: props.classes.tab_container_title_container }}>
+          <Typography variant="display1">{props.title}</Typography>
+        </Grid>
+      ) : null}
       <Grid item xs={12} classes={{ item: props.classes.tabs_container_inner_container }}>
         {props.children}
       </Grid>
@@ -21,12 +23,16 @@ const TabContainer = props => (
 );
 
 TabContainer.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
+};
+
+TabContainer.defaultProps = {
+  title: null,
 };
 
 export default withStyles(Styles)(TabContainer);
