@@ -74,7 +74,7 @@ class MainLayout extends React.Component {
               fiveDayForcast: res[1].list,
             });
           })
-          .catch((error) => this.setState({ error }))
+          .catch((e) => this.setState({ error: e.message || e }));
       });
     } else {
       this.setState({
