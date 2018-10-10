@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import OWMResponse from 'api/OWMResponse';
 
-import Styles from './styles';
+import Styles from 'styles';
 
 const CurrentTemp = props => {
   const { currentWeather, classes } = props;
@@ -42,7 +42,7 @@ const CurrentTemp = props => {
 };
 
 CurrentTemp.propTypes = {
-  currentWeather: PropTypes.instanceOf(OWMResponse),
+  currentWeather: PropTypes.instanceOf(OWMResponse).isRequired,
   // from withStyles
   classes: PropTypes.object.isRequired,
 };

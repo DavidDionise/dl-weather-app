@@ -10,7 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import { Link } from 'react-router-dom';
 import OWMResponse from 'api/OWMResponse';
 
-import Styles from './styles';
+import Styles from 'styles';
 
 class FiveDayTemp extends React.Component {
   static propTypes = {

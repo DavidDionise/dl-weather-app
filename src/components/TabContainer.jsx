@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Styles from './styles';
+import Styles from 'styles';
 
 const TabContainer = props => (
   <Paper classes={{ root: props.classes.tab_container_outer_container }}>

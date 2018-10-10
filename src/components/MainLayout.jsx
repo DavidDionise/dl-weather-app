@@ -18,7 +18,7 @@ import routes from 'routes';
 import fetchWeather from 'api/fetchWeather';
 import OWMResponse from 'api/OWMResponse';
 
-import Styles from './styles';
+import Styles from 'styles';
 
 @withStyles(Styles)
 @withRouter
@@ -73,7 +73,8 @@ class MainLayout extends React.Component {
               currentWeather: res[0],
               fiveDayForcast: res[1].list,
             });
-          });
+          })
+          .catch((error) => this.setState({ error }))
       });
     } else {
       this.setState({
